@@ -33,11 +33,11 @@ class MyClient(discord.Client):
         if message.author == self.user:
             return
 
-        match = re.search("^no .+\?$", message.content)
+        match = re.search("^(n|N)o .+\?$", message.content)
 
         if match is not None:
             image = createImage(message.content)
-            await message.reply(message.content, file=discord.File(image, filename="nobitches.png"))
+            await message.reply(file=discord.File(image, filename="nobitches.png"))
 
 intents = discord.Intents.default()
 intents.message_content = True
