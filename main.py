@@ -7,6 +7,7 @@ import re
 from PIL import Image, ImageDraw, ImageFont
 from io import BytesIO
 from random import shuffle, randint
+import asyncio
 
 load_dotenv()
 
@@ -44,10 +45,13 @@ class MyClient(discord.Client):
                 print(message.mentions)
             await message.reply(f"{' '.join(list(map(lambda x: x.mention, message.mentions)))}", file=discord.File(image, filename="nobitches.png"))
 
-        if randint(1, 100) == 1:
+        if randint(1, 50) == 1:
             words = message.content.split()
+            print("got the random")
             if len(words) >= 3:
                 shuffle(words)
+                print("gonna do it in 10 minutes")
+                await asyncio.sleep(600)
                 await message.reply(f"She {words[0]}ing on my {words[1]} till I {words[2]}")
 
 intents = discord.Intents.default()
