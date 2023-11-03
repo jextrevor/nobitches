@@ -6,6 +6,7 @@ from dotenv import load_dotenv
 import re
 from PIL import Image, ImageDraw, ImageFont
 from io import BytesIO
+from random import shuffle, randint
 
 load_dotenv()
 
@@ -42,6 +43,12 @@ class MyClient(discord.Client):
             if message.mentions:
                 print(message.mentions)
             await message.reply(f"{' '.join(list(map(lambda x: x.mention, message.mentions)))}", file=discord.File(image, filename="nobitches.png"))
+
+        if randint(1, 100) == 1:
+            words = message.content.split()
+            if len(words) >= 3:
+                shuffle(words)
+                await message.reply(f"She {words[0]}ing on my {words[1]} till I {words[2]}")
 
 intents = discord.Intents.default()
 intents.message_content = True
