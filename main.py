@@ -52,7 +52,7 @@ class MyClient(discord.Client):
                 shuffle(words)
                 print("gonna do it in 10 minutes")
                 await asyncio.sleep(600)
-                await message.reply(f"She {words[0]}ing on my {words[1]} till I {words[2]}")
+                await message.reply(f"She {words[0].lower()}ing on my {words[1].lower()} till I {words[2].lower()}")
 
 intents = discord.Intents.default()
 intents.message_content = True
