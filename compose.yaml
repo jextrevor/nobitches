@@ -1,0 +1,6 @@
+services:
+  bot:
+    build:
+      context: .
+    environment:
+      DISCORD_TOKEN: ${DISCORD_TOKEN}
