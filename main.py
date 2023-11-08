@@ -13,6 +13,21 @@ load_dotenv()
 
 myFont = ImageFont.truetype('impact.ttf', 80)
 
+FILLER_WORDS = [
+    'and',
+    'or',
+    'i',
+    'you',
+    'but',
+    'an',
+    'a',
+    'for',
+    'yet',
+    'so',
+    'i\'m',
+    'you\'re'
+]
+
 def createImage(message):
     # Open an Image
     img = Image.open('nobitches.png')
@@ -27,6 +42,9 @@ def createImage(message):
     img.save(returnFile, format="PNG")
     returnFile.seek(0)
     return returnFile
+
+def exclude_filler_words(word):
+    return word.lower() not in FILLER_WORDS
 
 class MyClient(discord.Client):
     async def on_ready(self):
@@ -45,8 +63,8 @@ class MyClient(discord.Client):
                 print(message.mentions)
             await message.reply(f"{' '.join(list(map(lambda x: x.mention, message.mentions)))}", file=discord.File(image, filename="nobitches.png"))
 
-        if randint(1, 50) == 1:
-            words = message.content.split()
+        if randint(1, 40) == 1:
+            words = filter(exclude_filler_words, message.content.split())
             print("got the random")
             if len(words) >= 3:
                 shuffle(words)
