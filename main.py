@@ -46,7 +46,7 @@ def createImage(message):
     return returnFile
 
 def exclude_filler_words(word):
-    return word.lower() not in FILLER_WORDS
+    return True
 
 class MyClient(discord.Client):
     async def on_ready(self):
@@ -71,7 +71,7 @@ class MyClient(discord.Client):
             if len(words) >= 3:
                 shuffle(words)
                 print("gonna do it in 10 minutes")
-                await asyncio.sleep(600)
+                await asyncio.sleep(randint(300,1200))
                 await message.reply(f"She {words[0].lower()} on my {words[1].lower()} till I {words[2].lower()}")
 
 intents = discord.Intents.default()
