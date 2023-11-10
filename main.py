@@ -25,7 +25,9 @@ FILLER_WORDS = [
     'yet',
     'so',
     'i\'m',
-    'you\'re'
+    'you\'re',
+    'am',
+    'are'
 ]
 
 def createImage(message):
@@ -64,13 +66,13 @@ class MyClient(discord.Client):
             await message.reply(f"{' '.join(list(map(lambda x: x.mention, message.mentions)))}", file=discord.File(image, filename="nobitches.png"))
 
         if randint(1, 40) == 1:
-            words = filter(exclude_filler_words, message.content.split())
+            words = list(filter(exclude_filler_words, message.content.split()))
             print("got the random")
             if len(words) >= 3:
                 shuffle(words)
                 print("gonna do it in 10 minutes")
                 await asyncio.sleep(600)
-                await message.reply(f"She {words[0].lower()}ing on my {words[1].lower()} till I {words[2].lower()}")
+                await message.reply(f"She {words[0].lower()} on my {words[1].lower()} till I {words[2].lower()}")
 
 intents = discord.Intents.default()
 intents.message_content = True
