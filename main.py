@@ -4,7 +4,8 @@ import discord
 import os
 from dotenv import load_dotenv
 import re
-from PIL import Image, ImageDraw, ImageFont
+from PIL import Image, ImageFont
+from pilmoji import Pilmoji
 from io import BytesIO
 from random import shuffle, randint
 import asyncio
@@ -27,26 +28,25 @@ FILLER_WORDS = [
     'i\'m',
     'you\'re',
     'am',
-    'are'
+    'are',
+    'it',
+    'that',
+    'the'
 ]
 
 def createImage(message):
-    # Open an Image
-    img = Image.open('nobitches.png')
-
-    # Call draw Method to add 2D graphics in an image
-    I1 = ImageDraw.Draw(img)
-
-    _, _, w, h = I1.textbbox((0, 0), message.upper(), font=myFont)
-    I1.text(((737-w)/2, 750), message.upper(), font=myFont, fill=(255,255,255))
-    returnFile = BytesIO()
-    # Save the edited image
-    img.save(returnFile, format="PNG")
-    returnFile.seek(0)
-    return returnFile
+    with Image.open('nobitches.png') as img:
+        # Call draw Method to add 2D graphics in an image
+        with Pilmoji(img) as pilmoji:
+            pilmoji.text((int((737 - pilmoji.getsize(message.upper(), myFont)[0])/2), 750), message.upper(), fill="white", font=myFont)
+        returnFile = BytesIO()
+        # Save the edited image
+        img.save(returnFile, format="PNG")
+        returnFile.seek(0)
+        return returnFile
 
 def exclude_filler_words(word):
-    return True
+    return word not in FILLER_WORDS
 
 class MyClient(discord.Client):
     async def on_ready(self):
