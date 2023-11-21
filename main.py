@@ -14,6 +14,8 @@ load_dotenv()
 
 myFont = ImageFont.truetype('impact.ttf', 80)
 
+hasWarned = False
+
 FILLER_WORDS = [
     'and',
     'or',
@@ -71,8 +73,13 @@ class MyClient(discord.Client):
             if len(words) >= 3:
                 shuffle(words)
                 print("gonna do it in 10 minutes")
-                await asyncio.sleep(randint(300,1200))
+                await asyncio.sleep(randint(300, 1200))
                 await message.reply(f"She {words[0].lower()} on my {words[1].lower()} till I {words[2].lower()}")
+        
+        if randint(1, 300) == 1 and hasWarned == False:
+            hasWarned = True
+            await asyncio.sleep(randint(21600, 54000))
+            await message.reply("Quick, run, they're coming for you")
 
 intents = discord.Intents.default()
 intents.message_content = True
