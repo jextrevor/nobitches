@@ -73,7 +73,7 @@ class MyClient(discord.Client):
             if len(words) >= 3:
                 shuffle(words)
                 print("gonna do it in 10 minutes")
-                await asyncio.sleep(randint(300, 1200))
+                await asyncio.sleep(randint(2700, 21600))
                 await message.reply(f"She {words[0].lower()} on my {words[1].lower()} till I {words[2].lower()}")
         
         if randint(1, 300) == 1 and hasWarned == False:
