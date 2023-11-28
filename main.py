@@ -55,6 +55,7 @@ class MyClient(discord.Client):
         print('Logged on as', self.user)
 
     async def on_message(self, message):
+        global hasWarned
         # don't respond to ourselves
         if message.author == self.user:
             return
