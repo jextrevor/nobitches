@@ -4,4 +4,7 @@ services:
       context: .
     environment:
       DISCORD_TOKEN: ${DISCORD_TOKEN}
+      TRANSFORMERS_CACHE: /transformers_cache
+    volumes:
+      - transformers_cache:/transformers_cache
     restart: unless-stopped
