@@ -8,11 +8,13 @@ from PIL import Image, ImageFont
 from pilmoji import Pilmoji
 from io import BytesIO
 from random import shuffle, randint
+from transformers import pipeline, Conversation
 import asyncio
 
 load_dotenv()
 
 myFont = ImageFont.truetype('impact.ttf', 80)
+chatbot = pipeline(model="microsoft/DialoGPT-large")
 
 hasWarned = False
 
@@ -60,6 +62,12 @@ class MyClient(discord.Client):
         if message.author == self.user:
             return
 
+        if self.user in message.mentions:
+            conversation = Conversation(message.content)
+            conversation = chatbot(conversation)
+            await message.reply(conversation.generated_responses[-1])
+            return
+
         match = re.search("(n|N)o .+\?", message.content)
 
         if match is not None:
@@ -77,11 +85,6 @@ class MyClient(discord.Client):
                 await asyncio.sleep(randint(2700, 21600))
                 await message.reply(f"She {words[0].lower()} on my {words[1].lower()} till I {words[2].lower()}")
         
-        if randint(1, 300) == 1 and hasWarned == False:
-            hasWarned = True
-            await asyncio.sleep(randint(21600, 54000))
-            await message.reply("Quick, run, they're coming for you")
-
 intents = discord.Intents.default()
 intents.message_content = True
 client = MyClient(intents=intents)
