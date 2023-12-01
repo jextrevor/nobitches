@@ -24,7 +24,6 @@ RUN adduser \
     --gecos "" \
     --home "/nonexistent" \
     --shell "/sbin/nologin" \
-    --no-create-home \
     --uid "${UID}" \
     appuser
 
@@ -45,7 +44,7 @@ COPY . .
 # Don't Expose any port
 # EXPOSE 3000
 
-ENV TRANSFORMERS_CACHE=/app
+# ENV TRANSFORMERS_CACHE=/app
 
 # Run the application.
 CMD python3 main.py
