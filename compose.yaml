@@ -8,3 +8,5 @@ services:
     volumes:
       - transformers_cache:/transformers_cache
     restart: unless-stopped
+volumes:
+  transformers_cache:
