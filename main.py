@@ -8,15 +8,18 @@ from PIL import Image, ImageFont
 from pilmoji import Pilmoji
 from io import BytesIO
 from random import shuffle, randint
-from transformers import pipeline, Conversation
+from transformers import AutoModelForCausalLM, AutoTokenizer
+import torch
 import asyncio
 
 load_dotenv()
 
 myFont = ImageFont.truetype('impact.ttf', 80)
-chatbot = pipeline(model="microsoft/DialoGPT-large")
+tokenizer = AutoTokenizer.from_pretrained("microsoft/DialoGPT-large", padding_side='left')
+model = AutoModelForCausalLM.from_pretrained("microsoft/DialoGPT-large")
 
-hasWarned = False
+convo = False
+chat_history_ids = None
 
 FILLER_WORDS = [
     'and',
@@ -57,15 +60,20 @@ class MyClient(discord.Client):
         print('Logged on as', self.user)
 
     async def on_message(self, message):
-        global hasWarned
+        global convo, chat_history_ids
         # don't respond to ourselves
         if message.author == self.user:
             return
 
         if self.user in message.mentions:
-            conversation = Conversation(message.content)
-            conversation = chatbot(conversation)
-            await message.reply(conversation.generated_responses[-1])
+            new_user_input_ids = tokenizer.encode(message.content + tokenizer.eos_token, return_tensors='pt')
+
+            bot_input_ids = torch.cat([chat_history_ids, new_user_input_ids], dim=-1) if convo else new_user_input_ids
+            convo = True
+
+            chat_history_ids = model.generate(bot_input_ids, max_length=1000, do_sample=True, top_k=100, temperature=0.75, pad_token_id=tokenizer.eos_token_id)
+
+            await message.reply(tokenizer.decode(chat_history_ids[:, bot_input_ids.shape[-1]:][0], skip_special_tokens=True))
             return
 
         match = re.search("(n|N)o .+\?", message.content)
