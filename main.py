@@ -71,7 +71,7 @@ class MyClient(discord.Client):
             bot_input_ids = torch.cat([chat_history_ids, new_user_input_ids], dim=-1) if convo else new_user_input_ids
             convo = True
 
-            chat_history_ids = model.generate(bot_input_ids, max_length=1000, do_sample=True, top_k=100, temperature=0.75, pad_token_id=tokenizer.eos_token_id)
+            chat_history_ids = model.generate(bot_input_ids, max_length=500, do_sample=True, top_k=100, temperature=0.75, pad_token_id=tokenizer.eos_token_id)
 
             await message.reply(tokenizer.decode(chat_history_ids[:, bot_input_ids.shape[-1]:][0], skip_special_tokens=True))
             return
